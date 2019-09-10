@@ -31,8 +31,8 @@ export default class VideoPlayer extends Component {
     super(props, context);
     //alert(sources.youtube[0].url)
     this.state = {
-      //source:'http://media.w3.org/2010/05/sintel/trailer.mp4'
-        source: null
+      source:'http://media.w3.org/2010/05/sintel/trailer.mp4'
+      //source: null
     };
 
   }
@@ -43,7 +43,7 @@ export default class VideoPlayer extends Component {
        fetch('http://localhost:3000/youtube').then((data) => { return data.json()}).then((json) => {
       alert(json[0].url);
       this.setState({source : 'http://media.w3.org/2010/05/sintel/trailer.mp4'})
-    //  this.player.subscribeToStateChange(this.handleStateChange.bind(this));
+      this.player.subscribeToStateChange(this.handleStateChange.bind(this));
   }).catch(console.log);
   }
   handleStateChange = (state) => {

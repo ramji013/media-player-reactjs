@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button } from 'reactstrap';
+import { Button } from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as Icons from '@fortawesome/fontawesome-free-solid';
 import '../../App.css';
@@ -10,7 +10,7 @@ export default class PlayerControl extends Component{
             this.props.player.play(); 
             document.getElementById("play").disabled = true;
             document.getElementById("pause").disabled = false;
-} 
+    } 
 
     pause = () => {
             this.props.player.pause(); 
@@ -43,7 +43,8 @@ export default class PlayerControl extends Component{
 
     render(){
         return(           
-            <div className="player-control">
+            <div className="video-controls">
+                <div className="container">
             <Button onClick={this.play} id="play">
                  <FontAwesomeIcon icon={Icons.faPlayCircle} size="1x"/>
              </Button>
@@ -71,7 +72,7 @@ export default class PlayerControl extends Component{
              <Button>
                   <FontAwesomeIcon icon={Icons.faThumbsDown} size="1x"/>
              </Button>
-
+             </div>
          </div>
         )
     }
