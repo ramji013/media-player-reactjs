@@ -1,13 +1,18 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 export default function Home(){
+
+    const navStyle = {
+        color: 'white'
+    }
+
     return (
         <nav className="nav-tag">
             <ul className="nav-links">
-                <li>Home</li>
-                <li>Add Video</li>
-                <li>Admin</li>
+                <li><Link style={navStyle} to="/">Home</Link></li>
+                <li><Link style= {navStyle} to="/addVideo">Add Video</Link></li>
+                <li><Link style= {navStyle} to="/control">Control</Link></li>
             </ul>
         </nav>
     );

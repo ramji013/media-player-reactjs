@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 import { Player, ControlBar } from 'video-react';
 import PlayerControl from '../control/PlayerControl'
 import PlayList from '../control/PlayList';
@@ -41,9 +41,8 @@ export default class VideoPlayer extends Component {
 
   componentDidMount = () => {
        fetch('http://localhost:3000/youtube').then((data) => { return data.json()}).then((json) => {
-      alert(json[0].url);
-      this.setState({source : 'http://media.w3.org/2010/05/sintel/trailer.mp4'})
-      this.player.subscribeToStateChange(this.handleStateChange.bind(this));
+       this.setState({source : 'http://media.w3.org/2010/05/sintel/trailer.mp4'})
+       this.player.subscribeToStateChange(this.handleStateChange.bind(this));
   }).catch(console.log);
   }
   handleStateChange = (state) => {

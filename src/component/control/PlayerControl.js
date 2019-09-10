@@ -43,9 +43,8 @@ export default class PlayerControl extends Component{
 
     render(){
         return(           
-            <div className="video-controls">
-                <div className="container">
-            <Button onClick={this.play} id="play">
+            <div className="player-control">
+             <Button onClick={this.play} id="play">
                  <FontAwesomeIcon icon={Icons.faPlayCircle} size="1x"/>
              </Button>
              <Button onClick={this.pause} id="pause">
@@ -72,7 +71,6 @@ export default class PlayerControl extends Component{
              <Button>
                   <FontAwesomeIcon icon={Icons.faThumbsDown} size="1x"/>
              </Button>
-             </div>
          </div>
         )
     }
