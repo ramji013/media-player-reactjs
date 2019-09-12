@@ -1,10 +1,18 @@
 import React, {Component} from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ProgressBar } from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as Icons from '@fortawesome/fontawesome-free-solid';
 import '../../App.css';
 
 export default class PlayerControl extends Component{
+
+    constructor(props){
+        super(props)
+        this.state = {
+            currentTime : 0
+        };
+    }
+
 
     play = () => {
             this.props.player.play(); 
@@ -41,9 +49,16 @@ export default class PlayerControl extends Component{
           };
       }
 
+      changeCurrentTime = (seconds) =>{
+        return () => {
+            const { player } = this.props.player.getState();
+            return player.currentTime + seconds;
+          };
+      }
+
     render(){
         return(           
-            <div className="player-control">
+            <div className="video-controls">
              <Button onClick={this.play} id="play">
                  <FontAwesomeIcon icon={Icons.faPlayCircle} size="1x"/>
              </Button>
@@ -71,6 +86,18 @@ export default class PlayerControl extends Component{
              <Button>
                   <FontAwesomeIcon icon={Icons.faThumbsDown} size="1x"/>
              </Button>
+
+             <ProgressBar now={60} srOnly />
+             <div className='progress'>
+  <div className='progress-bar'
+       role='progressbar'
+       aria-valuenow='70'
+       aria-valuemin='0'
+       aria-valuemax='100'
+       style={{width: '70%'}}>
+    <span className='sr-only'>70% Complete</span>
+  </div>
+</div>
          </div>
         )
     }

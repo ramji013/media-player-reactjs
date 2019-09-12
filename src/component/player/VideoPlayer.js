@@ -31,7 +31,7 @@ export default class VideoPlayer extends Component {
     super(props, context);
     //alert(sources.youtube[0].url)
     this.state = {
-      source:'http://media.w3.org/2010/05/sintel/trailer.mp4'
+      source:{}
       //source: null
     };
 
@@ -79,7 +79,7 @@ export default class VideoPlayer extends Component {
           <source src={this.state.source} />
           <ControlBar autoHide={true} disableDefaultControls={true} disableCompletely={true}/>
           
-        </Player>
+          </Player>
 
           <PlayerControl player={this.player}/> 
           <PlayList updateSource = {this.updateSource} sources = {this.sources} player={this.player}/>
