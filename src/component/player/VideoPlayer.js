@@ -82,7 +82,7 @@ export default class VideoPlayer extends Component {
           </Player>
 
           <PlayerControl player={this.player}/> 
-          <PlayList updateSource = {this.updateSource} sources = {this.sources} player={this.player}/>
+         
         
       </div>
     );

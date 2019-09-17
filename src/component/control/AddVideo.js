@@ -3,57 +3,88 @@ import { Player } from 'video-react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 export default class AddVideo extends Component{
-    constructor(props, context) {
-        super(props, context);
-    
-        this.state = {
-          playerSource: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
-          inputVideoUrl: 'http://www.w3schools.com/html/mov_bbb.mp4'
-        };
+   
+  state = {
+    lstVideoUrls: ["123"],
+    addTextUrl : "",
+    editIndex: -1,
+    editTextUrl: ""
+}
+
+handleAddTextUrlChange = (e) => {
+    this.setState({addTextUrl : e.target.value})
+};
+
+handleUpdateTextUrlChange = (e) => {
+    this.setState({addTextUrl : e.target.value})
+};
+
+addVideo = () => {
+    const{ lstVideoUrls, addTextUrl} = this.state;
+    if(addTextUrl){
+        lstVideoUrls.push(addTextUrl);
+        this.setState({lstVideoUrls});
+    }
+};
+
+deleteVideo = (urlIndex) => {
+  const {lstVideoUrls} = this.state;
+  lstVideoUrls.splice(urlIndex,1);
+  this.setState({lstVideoUrls});
+}
+
+editVideo = (urlIndex, url) => {
+    this.setState({editIndex: urlIndex, editTextUrl: url});
+};
+
+updateVideo = (urlIndex) => {
+    const{ lstVideoUrls, editTextUrl, editIndex} = this.state;
+    const newlstVideoUrls = Array.from(lstVideoUrls);
+    if(editTextUrl){
+        //lstVideoUrls[urlIndex] = editTextUrl;
+        newlstVideoUrls[urlIndex] = editTextUrl;
+        this.setState({lstVideoUrls : newlstVideoUrls, editTextUrl: ""})
+    }
+};
+
+cancelEdit = () => {
+  this.setState({editTextUrl: "", editIndex:-1});
+};
+
+render(){
+  const {lstVideoUrls, editIndex, addTextUrl, editTextUrl} = this.state;
+  return <div className="video-list-container" style={{ padding : "10px"}}>
+    <div className="video-add-form">
+      <label htmlFor="url">url</label>
+      <input name="url" type="url" value={addTextUrl} onChange={this.handleAddTextUrlChange}/>
+      <button type="button" onClick={this.addVideo}>Add Url</button>
+    </div>
+
+    <ul>
+      {
+        lstVideoUrls.map((url, urlIndex) => (
+            <li key={url}> {
+              editIndex !== urlIndex ? <span>{url}</span>:
+               <input type="url" value={editTextUrl} onChange={this.handleUpdateTextUrlChange}></input> 
+            }
+            {
+              editIndex !== urlIndex ?
+              <div>
+                <button onClick= { ()=> this.editVideo(urlIndex,editTextUrl)}> Edit</button>
+                <button onClick={ ()=> this.deleteVideo(urlIndex)}>Delete</button>
+              </div>:
+              <div>
+                <button onClick={() => this.updateVideo(urlIndex)}>Save</button>
+                <button onClick={()=> this.cancelEdit()}> Cancel</button>
+                
+              </div>
+            }
+
+            </li>   
+        ))
       }
-    
-      componentDidUpdate(prevProps, prevState) {
-        if (this.state.playerSource !== prevState.playerSource) {
-          this.player.load();
-        }
-      }
-    
-      handleValueChange = (e) => {
-        const { value } = e.target;
-        this.setState({
-          inputVideoUrl: value
-        });
-      }
-    
-      updatePlayerInfo = () => {
-        const { inputVideoUrl } = this.state;
-        this.setState({
-          playerSource: inputVideoUrl
-        });
-      }
-    
-      render() {
-        return (
-          <div>
-            <div className="docs-example">
-              <Form>
-                <FormGroup>
-                  <Label for="inputVideoUrl">Video Url</Label>
-                  <Input
-                    name="inputVideoUrl"
-                    id="inputVideoUrl"
-                    value={this.state.inputVideoUrl}
-                    onChange={this.handleValueChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Button type="button" onClick={this.updatePlayerInfo}>
-                    Update
-                  </Button>
-                </FormGroup>
-              </Form>
-            </div>
-          </div>
-        );
-      }
+    </ul>
+
+  </div>
+}
 }
