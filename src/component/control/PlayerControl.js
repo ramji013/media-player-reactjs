@@ -13,7 +13,6 @@ export default class PlayerControl extends Component{
         };
     }
 
-
     play = () => {
             this.props.player.play(); 
             document.getElementById("play").disabled = true;
@@ -81,6 +80,7 @@ export default class PlayerControl extends Component{
 
              <Button>
                   <FontAwesomeIcon icon={Icons.faThumbsUp} size="1x"/>
+                  <label ></label>
              </Button>
 
              <Button>

@@ -47,13 +47,7 @@ body {
 	background-image: -webkit-linear-gradient(bottom, rgb(15, 184, 161) 13%, rgb(15, 184, 161) 100%);
 	background-image: -ms-linear-gradient(bottom, rgb(15, 184, 161) 13%, rgb(15, 184, 161) 100%);
 
-  background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0.13, rgb(189, 163, 109)),
-		color-stop(1, rgb(15, 184, 161) )
-	);
+
 }
 
 .video-container {
@@ -64,4 +58,12 @@ body {
 
 .space{
   justify-content: space-around;
+}
+
+.btn_space_left{
+  margin-left:10px;
+}
+
+.btn_space_right{
+  margin-right:10px;
 }

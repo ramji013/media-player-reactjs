@@ -12,7 +12,6 @@ export default function Home(){
             <ul className="nav-links">
                 <li><Link style={navStyle} to="/">Home</Link></li>
                 <li><Link style= {navStyle} to="/addVideo">Add Video</Link></li>
-                <li><Link style= {navStyle} to="/control">Control</Link></li>
             </ul>
         </nav>
     );

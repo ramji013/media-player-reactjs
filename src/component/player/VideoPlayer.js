@@ -3,48 +3,21 @@ import { Player, ControlBar } from 'video-react';
 import PlayerControl from '../control/PlayerControl'
 import PlayList from '../control/PlayList';
 import '../../App.css';
-
-const sources = {
-  "youtube" :   [ {
-    "title" : "sintelTrailer",
-    "url" : 'http://media.w3.org/2010/05/sintel/trailer.mp4',
-    "likes" : 0,
-    "dislikes" : 1
-  },
-  {
-    "title" : "bunnyTrailer",
-    "url" : "http://media.w3.org/2010/05/bunny/trailer.mp4",
-    "likes" : 0,
-    "dislikes" : 1
-  },
-  {
-    "title" : "bunnyMovie",
-    "url" : "http://media.w3.org/2010/05/bunny/movie.mp4",
-    "likes" : 0,
-    "dislikes" : 1
-  }
-]
-};
+import axios from 'axios';
 
 export default class VideoPlayer extends Component {
   constructor(props, context) {
     super(props, context);
     //alert(sources.youtube[0].url)
     this.state = {
-      source:{}
+      source:""
       //source: null
     };
 
   }
 
-  updateSource = (source) => this.setState({sources : source.youtube})
+  updateSource = (source) => this.setState({sources : source})
 
-  componentDidMount = () => {
-       fetch('http://localhost:3000/youtube').then((data) => { return data.json()}).then((json) => {
-       this.setState({source : 'http://media.w3.org/2010/05/sintel/trailer.mp4'})
-       this.player.subscribeToStateChange(this.handleStateChange.bind(this));
-  }).catch(console.log);
-  }
   handleStateChange = (state) => {
     // copy player state to this component's state
     this.setState({
@@ -72,18 +45,24 @@ export default class VideoPlayer extends Component {
     };
   }
 
+  changeSource = (url) => {
+    alert(url);
+      this.setState({
+          source: url
+        });
+        this.player.load();
+        this.player.play();
+    }
+
   render() {
     return (
       <div>
         <Player ref={player => { this.player = player }}>
           <source src={this.state.source} />
           <ControlBar autoHide={true} disableDefaultControls={true} disableCompletely={true}/>
-          
           </Player>
-
           <PlayerControl player={this.player}/> 
-         
-        
+         <PlayList player={this.player} changeSource={this.changeSource}/>
       </div>
     );
   }

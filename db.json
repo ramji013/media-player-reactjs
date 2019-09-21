@@ -3,19 +3,25 @@
       "title" : "sintelTrailer",
       "url" : "http://media.w3.org/2010/05/sintel/trailer.mp4",
       "likes" : 0,
-      "dislikes" : 1
+      "dislikes" : 1,
+      "description" : "Sintel Trailer",
+      "isApproved": true
     },
     {
       "title" : "bunnyTrailer",
       "url" : "http://media.w3.org/2010/05/bunny/trailer.mp4",
       "likes" : 0,
-      "dislikes" : 1
+      "dislikes" : 1,
+      "description" : "Bunny Trailer",
+      "isApproved": true
     },
     {
       "title" : "bunnyMovie",
       "url" : "http://media.w3.org/2010/05/bunny/movie.mp4",
       "likes" : 0,
-      "dislikes" : 1
+      "dislikes" : 1,
+      "description" : "Bunny Movie",
+      "isApproved": false
     }
   ]
   }
