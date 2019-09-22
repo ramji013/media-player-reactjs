@@ -2,41 +2,7 @@ import React, {Component} from 'react';
 import '../../App.css';
 import axios from 'axios';
 
-function getVideoList() {
-    return axios.get("http://localhost:3000/youtube").then(response => {
-       return response.data
-    })
-  }
- 
-const sources = {
-  "youtube" :   [ {
-    "title" : "sintelTrailer",
-    "url" : 'http://media.w3.org/2010/05/sintel/trailer.mp4',
-    "likes" : 0,
-    "dislikes" : 1,
-    "description" : "Sintel Trailer",
-    "isApproved" : true
-  },
-  {
-    "title" : "bunnyTrailer",
-    "url" : "http://media.w3.org/2010/05/bunny/trailer.mp4",
-    "likes" : 0,
-    "dislikes" : 1,
-    "description" : "Bunny Trailer",
-    "isApproved" : true
-  },
-  {
-    "title" : "bunnyMovie",
-    "url" : "http://media.w3.org/2010/05/bunny/movie.mp4",
-    "likes" : 0,
-    "dislikes" : 1,
-    "description" : "Bunny Movie",
-    "isApproved" : false
-  }
-]
-};
-
-const videolst = getVideoList()
+const sources = {}
 
 export default class AddVideo extends Component{
    
@@ -53,6 +19,7 @@ componentDidMount(){
   axios.get("http://localhost:3000/youtube").then(response => {
     this.setState({lstVideoUrls: response.data})
   });
+  alert("componentMount" + this.state.lstVideoUrls)
 }
 
 handleAddTextUrlChange = (e) => {
@@ -71,6 +38,12 @@ handleUpdateDescription = (e) => {
   this.setState({editDescription : e.target.value})
 };
 
+getId = () =>  { const min = 1;
+const max = 100;
+const rand = Math.round(min + Math.random() * (max - min));
+return rand;
+}
+
 addVideo = () => {
     const{ addTextUrl, addDescription} = this.state;
     if(addTextUrl){
@@ -79,14 +52,18 @@ addVideo = () => {
          "url" : addTextUrl,
          "isApproved" : false,
          "likes" : 0,
-         "dislikes" : 0
+         "dislikes" : 0,
+         "id" : this.getId()
       }
+      
+      axios.post('http://localhost:3000/youtube', postData).then(res => {
+        this.state.lstVideoUrls.push(postData);
+      }
+      );
 
-      axios.post('http://localhost:3000/youtube', {postData});
-
-      axios.get('localhost:3000/youtube').then(response => {
-        this.setState({lstVideoUrls : response.data, addTextUrl: ""});
-      })
+      axios.get('http://localhost:3000/youtube').then(response => {
+        this.setState({lstVideoUrls : response.data, addTextUrl: "", addDescription : ""});
+      });
         
     }
 };
@@ -95,6 +72,37 @@ deleteVideo = (urlIndex) => {
   const {lstVideoUrls} = this.state;
   lstVideoUrls.splice(urlIndex,1);
   this.setState({lstVideoUrls});
+}
+
+approveVideo = (id, urlIndex) => {
+  var url = 'http://localhost:3000/youtube/'+id+'/';
+  var approvePlayList = {
+  
+ }
+ alert("approve video : url id : " + url);
+  axios.get(url).then(response => {
+      approvePlayList = response.data;   
+      approvePlayList.isApproved = true;
+      axios.put('http://localhost:3000/youtube/'+id, approvePlayList).then(res => {
+ }
+ ).catch(error => {
+  console.log(error.response)
+});
+  }).catch(error => {
+    console.log(error.response)
+});
+  
+
+ axios.get('localhost:3000/youtube').then(response => {
+  // var newLstVideoUrls = Array.values(this.state.lstVideoUrls)
+  // newLstVideoUrls[urlIndex].isApproved = true;
+  // this.setState({lstVideoUrls : newLstVideoUrls, addTextUrl: ""});
+  this.setState({lstVideoUrls : response.data})
+  alert("data :::: " + this.lstVideoUrls);  
+}).catch(error => {
+  console.log(error.response)
+});
+
 }
 
 editVideo = (urlIndex, url) => {
@@ -153,7 +161,7 @@ render(){
               <div>
                 <button onClick= { ()=> this.editVideo(urlIndex,data.url)}> Edit</button>
                 <button onClick={ ()=> this.deleteVideo(urlIndex)}>Delete</button>
-                <button onClick={ ()=> this.deleteVideo(urlIndex)} disabled={data.isApproved}>Approve</button>
+                <button onClick={ ()=> this.approveVideo(data.id,urlIndex)} disabled={data.isApproved}>Approve</button>
               </div>:
               <div>
                 <button onClick={() => this.updateVideo(urlIndex)}>Save</button>
@@ -165,7 +173,6 @@ render(){
             </tr>   
         ))
           }
-           
           </tbody>
           </table>
   </div>

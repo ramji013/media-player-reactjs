@@ -36,7 +36,9 @@ export default class PlayList extends Component{
 {
   this.state.lstVideoUrls.map((data, urlIndex) => (
        <tr key={urlIndex}> <td> {
-         <Button id={data.url} onClick={this.playVideo} value= {data.url} variant="primary"> Play -> {data.description}</Button>
+        
+         <Button id={data.url} onClick={this.playVideo} value= {data.url} variant="primary" disabled={!data.isApproved}> Play -> {data.description}</Button>
+
       }
          </td>
        </tr>   
