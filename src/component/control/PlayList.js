@@ -3,10 +3,6 @@ import axios from 'axios';
 import { Button } from 'react-bootstrap';
 
 export default class PlayList extends Component{
-  
-  // state = {
-  //     lstVideoUrls : []
-  // }; 
 
   constructor(props){
     super(props)
@@ -15,16 +11,14 @@ export default class PlayList extends Component{
     };
 }
 
-  
-
-  componentDidMount(){
+componentDidMount(){
     axios.get("http://localhost:3000/youtube").then(response => {
       this.setState({lstVideoUrls: response.data})
     });
   }
 
   playVideo = (e) => {
-    this.props.changeSource(e.target.value);
+    this.props.changeSource(e.target.value, e.target.id);
   }
 
  render(){
@@ -36,9 +30,7 @@ export default class PlayList extends Component{
 {
   this.state.lstVideoUrls.map((data, urlIndex) => (
        <tr key={urlIndex}> <td> {
-        
-         <Button id={data.url} onClick={this.playVideo} value= {data.url} variant="primary" disabled={!data.isApproved}> Play -> {data.description}</Button>
-
+         <Button id={data.id} onClick={this.playVideo} value= {data.url} variant="primary" disabled={!data.isApproved}> Play -> {data.description}</Button>
       }
          </td>
        </tr>   

@@ -3,13 +3,16 @@ import { Button, ProgressBar } from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as Icons from '@fortawesome/fontawesome-free-solid';
 import '../../App.css';
+import axios from 'axios';
 
 export default class PlayerControl extends Component{
 
     constructor(props){
         super(props)
         this.state = {
-            currentTime : 0
+            currentTime : 0,
+            like : 0,
+            unlike: 0
         };
     }
 
@@ -55,6 +58,41 @@ export default class PlayerControl extends Component{
           };
       }
 
+      loadLikeUnLike = () => {
+        var id = this.props.id
+        var data = {}
+        axios.get('http://localhost:3000/youtube/'+id).then( res =>{
+            data = res.data;
+            this.setState({likes : data.likes, unlike: data.unlike})
+      });
+      }
+      
+      like = () => {
+          var id = this.props.id
+          var data = {}
+          axios.get('http://localhost:3000/youtube/'+id).then( res =>{
+              data = res.data;
+              data.likes = data.likes + 1;
+              this.setState({like : data.likes});
+              axios.put('http://localhost:3000/youtube/'+id, data).then(response => {
+                    console.log("updated likes..." + response.data)
+              })
+          })
+      }
+
+      unlike = () => {
+        var id = this.props.id
+        var data = {}
+        axios.get('http://localhost:3000/youtube/'+id).then( res =>{
+            data = res.data;
+            data.dislikes = data.dislikes + 1;
+            this.setState({unlike : data.dislikes});
+            axios.put('http://localhost:3000/youtube/'+id, data).then(response => {
+                console.log("updated dislikes..." + response.data)
+            })
+        })
+    }
+
     render(){
         return(           
             <div className="video-controls">
@@ -78,13 +116,14 @@ export default class PlayerControl extends Component{
                   <FontAwesomeIcon icon={Icons.faHeadphones} size="1x"/>
              </Button>
 
-             <Button>
+             <Button onClick={this.like}>
                   <FontAwesomeIcon icon={Icons.faThumbsUp} size="1x"/>
-                  <label ></label>
+                  <label>{this.state.like}</label>
              </Button>
 
-             <Button>
+             <Button onClick={this.unLike}>
                   <FontAwesomeIcon icon={Icons.faThumbsDown} size="1x"/>
+                  <label>{this.state.unlike}</label>
              </Button>
 
              <ProgressBar now={60} srOnly />

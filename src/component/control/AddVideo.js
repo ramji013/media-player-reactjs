@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import '../../App.css';
 import axios from 'axios';
 
-const sources = {}
-
 export default class AddVideo extends Component{
    
   state = {
@@ -19,7 +17,6 @@ componentDidMount(){
   axios.get("http://localhost:3000/youtube").then(response => {
     this.setState({lstVideoUrls: response.data})
   });
-  alert("componentMount" + this.state.lstVideoUrls)
 }
 
 handleAddTextUrlChange = (e) => {
@@ -68,53 +65,42 @@ addVideo = () => {
     }
 };
 
-deleteVideo = (urlIndex) => {
+deleteVideo = (urlIndex, id) => {
   const {lstVideoUrls} = this.state;
   lstVideoUrls.splice(urlIndex,1);
   this.setState({lstVideoUrls});
+  axios.delete('http://localhost:3000/youtube/'+id).then(res =>{
+    console.log("deleted data")
+  });
 }
 
 approveVideo = (id, urlIndex) => {
-  var url = 'http://localhost:3000/youtube/'+id+'/';
-  var approvePlayList = {
-  
- }
- alert("approve video : url id : " + url);
-  axios.get(url).then(response => {
-      approvePlayList = response.data;   
-      approvePlayList.isApproved = true;
-      axios.put('http://localhost:3000/youtube/'+id, approvePlayList).then(res => {
- }
- ).catch(error => {
-  console.log(error.response)
-});
+  const {lstVideoUrls} = this.state;
+  var approvePlayList = lstVideoUrls[urlIndex];
+  approvePlayList.isApproved = true;
+
+  axios.put('http://localhost:3000/youtube/'+id, approvePlayList).then(res => {
+    console.log("updated the approval flag")
+    lstVideoUrls[urlIndex].isApproved = true;
+    this.setState({lstVideoUrls})
   }).catch(error => {
-    console.log(error.response)
-});
-  
-
- axios.get('localhost:3000/youtube').then(response => {
-  // var newLstVideoUrls = Array.values(this.state.lstVideoUrls)
-  // newLstVideoUrls[urlIndex].isApproved = true;
-  // this.setState({lstVideoUrls : newLstVideoUrls, addTextUrl: ""});
-  this.setState({lstVideoUrls : response.data})
-  alert("data :::: " + this.lstVideoUrls);  
-}).catch(error => {
-  console.log(error.response)
-});
-
+   console.log(error.response)
+ });
 }
 
 editVideo = (urlIndex, url) => {
     this.setState({editIndex: urlIndex, editTextUrl: url});
 };
 
-updateVideo = (urlIndex) => {
-    const{editTextUrl} = this.state;
+updateVideo = (urlIndex,id) => {
+    const{lstVideoUrls,editTextUrl} = this.state;
    
     if(editTextUrl){
-        sources.youtube[urlIndex].url = editTextUrl;
-        this.setState({lstVideoUrls: sources.youtube, editTextUrl: "", editIndex: -1})
+        lstVideoUrls[urlIndex].url = editTextUrl;
+        axios.put('http://localhost:3000/youtube/'+id, lstVideoUrls[urlIndex]).then(res => {
+            console.log("updated video url .... ")
+            this.setState({lstVideoUrls, editTextUrl: "", editIndex: -1})
+        });   
     }
 };
 
@@ -160,11 +146,11 @@ render(){
               editIndex !== urlIndex ?
               <div>
                 <button onClick= { ()=> this.editVideo(urlIndex,data.url)}> Edit</button>
-                <button onClick={ ()=> this.deleteVideo(urlIndex)}>Delete</button>
+                <button onClick={ ()=> this.deleteVideo(urlIndex, data.id)}>Delete</button>
                 <button onClick={ ()=> this.approveVideo(data.id,urlIndex)} disabled={data.isApproved}>Approve</button>
               </div>:
               <div>
-                <button onClick={() => this.updateVideo(urlIndex)}>Save</button>
+                <button onClick={() => this.updateVideo(urlIndex, data.id)}>Save</button>
                 <button onClick={()=> this.cancelEdit()}> Cancel</button>
                 
               </div>
